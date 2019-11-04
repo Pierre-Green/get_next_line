@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:54 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/10/18 17:01:55 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/04 19:01:21 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,14 @@ typedef struct		s_buff
 {
 	char			buff[BUFF_SIZE];
 	size_t			len;
+	size_t			eol;
 	struct s_buff	*next;
 }					t_buff;
 
 int					get_next_line(int fd, char **line);
 
-t_buff				*init_buff();
+int					flush_to_eol(t_buff **buff, char **line);
 
-int					buff_clear(t_buff *buff);
-
-int					buff_write(t_buff *buff, char *src, size_t len);
-
-int					buff_flush(t_buff *buff, char **line);
-
-int					buff_flushn(t_buff *buff, char **line, size_t len);
+int					read_do_buff(t_buff *buff, int fd, char **line);
 
 #endif

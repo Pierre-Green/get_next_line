@@ -6,41 +6,51 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/10/18 18:19:07 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/04 19:08:34 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+static t_buff		*get_initial_buff()
+{
+	t_buff			*buff;
+
+	if (!(buff = malloc(sizeof(t_buff))))
+		return (NULL);
+	buff->eol = 0;
+	buff->len = 0;
+	buff->next = NULL;
+	return (buff);
+}
+
 int					get_next_line(int fd, char **line)
 {
 	static t_buff	*buff;
-	char			tmp_buff[BUFF_SIZE];
-	int				i;
-	int				j;
-	t_buff			*node;
+	char			tmp[1];
+	t_buff			*ptr;
+	int				read_ret;
 
-	if (!buff)
-		if (!(buff = init_buff()))
-			return (-1);
-	if (read(fd, buff->buff, 0) < 0)
-		return (-2);
-	node = buff;
-	while ((i = read(fd, tmp_buff, BUFF_SIZE)))
+	if ((ptr = buff))
+		while (ptr)
+		{
+			if (ptr->eol || ptr->buff[0] == '\n')
+				return (flush_to_eol(&buff, line));
+			ptr = ptr->next;
+		}
+	else if (!(buff = get_initial_buff()))
+		return (-1);
+	if (read(fd, tmp, 0) < 0)
+		return (-1);
+	if ((read_ret = read_do_buff(buff, fd, line)) >= 0)
 	{
-		if (i < 0)
-			return (buff_clear(buff) ? -3 : -2);
-		if ((j = buff_write(node, tmp_buff, i)) < 0)
-			return (buff_clear(buff) ? -4 : -5);
-		if (j < i)
-			break ;
-		if (!(node->next = init_buff()))
-			return (-7);
-		node = node->next;
+		if (read_ret % BUFF_SIZE == 0)
+			return (flush_to_eol(&buff, line));
+		else
+		{
+			flush_to_eol(&buff, line);
+			return (0);
+		}
 	}
-	if (i == 0)
-		return (buff_flush(buff, line));
-	else if (buff_flushn(buff, line, j) < 0)
-		return (-6);
-	return (1);
+	return (-1);
 }
