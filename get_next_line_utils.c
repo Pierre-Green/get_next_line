@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 16:09:13 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/04 19:09:59 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/05 20:32:55 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,15 @@ static void			trim_buff(t_buff *buff)
 	}
 }
 
+static t_buff		*clear_buff_next(t_buff *buff)
+{
+	t_buff			*ptr;
+
+	ptr = buff->next;
+	free((void *)buff);
+	return (ptr);
+}
+
 int					flush_to_eol(t_buff **buff, char **line)
 {
 	const size_t	len = len_to_eol(*buff);
@@ -81,56 +90,11 @@ int					flush_to_eol(t_buff **buff, char **line)
 		}
 		if ((*buff)->buff[j] == '\n')
 			trim_buff(*buff);
+		else
+			*buff = clear_buff_next(*buff);
 		i += j;
-		if (i < len)
-			*buff = (*buff)->next;
 	}
+	if ((*buff)->buff[0] == '\n')
+		*buff = clear_buff_next(*buff);
 	return (1);
-}
-
-static char			get_eol(t_buff *buff)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < buff->len)
-	{
-		if (buff->buff[i] == '\n')
-		{
-			buff->eol = i;
-			break ;
-		}
-		i++;
-	}
-	if (i == buff->len)
-		return (0);
-	return (1);
-}
-
-int				read_do_buff(t_buff *buff, int fd, char **line)
-{
-	int			read_ret;
-	t_buff		*node;
-
-	node = buff;
-	while (node->len && node->next && node->next->len)
-		node = node->next;
-	if (node->len)
-	{
-		if (!(node->next = malloc(sizeof(t_buff))))
-			return (-1);
-		node->next->eol = 0;
-		node->next->len = 0;
-		node->next->next = 0;
-		node = node->next;
-	}
-	if ((read_ret = read(fd, node->buff, BUFF_SIZE)) >= 0)
-	{
-		if (read_ret == 0)
-			return (0);
-		node->len = read_ret;
-		if (!get_eol(node))
-			return (read_do_buff(node, fd, line));
-	}
-	return (-1);
 }
