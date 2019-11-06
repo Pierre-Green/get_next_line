@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 16:09:13 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/05 20:32:55 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/06 18:59:19 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,46 @@ size_t			len_to_eol(t_buff *buff)
 {
 	t_buff		*node;
 	size_t		len;
+	size_t		i;
 
 	node = buff;
 	len = 0;
-	while (node->next && !node->eol && node->buff[0] != '\n')
+	while (node->next && !node->eol)
 	{
 		len += node->len;
 		node = node->next;
 	}
 	if (node->eol)
-		len += node->eol;
-	else if (!node->next && node->buff[0] != '\n')
+	{
+		i = 0;
+		while (i < node->len)
+		{
+			if (node->buff[i] == '\n')
+			{
+				len += i;
+				break ;
+			}
+			i++;
+		}
+	}
+	else if (!node->next)
 		len += node->len;
 	return (len);
 }
 
-static void			trim_buff(t_buff *buff)
+static void			trim_buff(t_buff *buff, unsigned int nl)
 {
 	char			tmp[BUFF_SIZE];
 	unsigned int	i;
 	unsigned int	j;
-	char			lock;
 
-	i = buff->eol + 1;
+	i = nl + 1;
 	buff->eol = 0;
-	lock = 0;
 	j = 0;
 	while (j < buff->len - i)
 	{
-		if (!lock && buff->buff[i + j] == '\n' && (lock = 1))
-			buff->eol = j;
+		if (buff->buff[i + j] == '\n')
+			buff->eol = 1;
 		tmp[j] = buff->buff[i + j];
 		j++;
 	}
@@ -79,7 +89,7 @@ int					flush_to_eol(t_buff **buff, char **line)
 	(*line)[len] = 0;
 	i = 0;
 	if (len == 0)
-		trim_buff(*buff);
+		trim_buff(*buff, 0);
 	while (i < len)
 	{
 		j = 0;
@@ -88,13 +98,13 @@ int					flush_to_eol(t_buff **buff, char **line)
 			(*line)[i + j] = (*buff)->buff[j];
 			j++;
 		}
-		if ((*buff)->buff[j] == '\n')
-			trim_buff(*buff);
+		if ((*buff)->buff[j] == '\n' && j < (*buff)->len)
+			trim_buff(*buff, j);
 		else
 			*buff = clear_buff_next(*buff);
 		i += j;
 	}
-	if ((*buff)->buff[0] == '\n')
-		*buff = clear_buff_next(*buff);
+	if ((*buff)->buff[0] =='\n' && (*buff)->eol)
+		trim_buff(*buff, 0);
 	return (1);
 }

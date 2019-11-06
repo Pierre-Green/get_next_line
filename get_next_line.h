@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:54 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/05 19:52:04 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/06 19:00:41 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct		s_buff
 {
 	char			buff[BUFF_SIZE];
 	size_t			len;
-	size_t			eol;
+	char			eol;
 	char			eof;
 	struct s_buff	*next;
 }					t_buff;

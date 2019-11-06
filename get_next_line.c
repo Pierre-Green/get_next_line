@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/05 19:38:52 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/06 16:35:52 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char			get_eol(t_buff *buff)
 	{
 		if (buff->buff[i] == '\n')
 		{
-			buff->eol = i;
+			buff->eol = 1;
 			break ;
 		}
 		i++;
@@ -82,7 +82,7 @@ int					get_next_line(int fd, char **line)
 	if ((ptr = buff))
 		while (ptr)
 		{
-			if (ptr->eol || ptr->eof || ptr->buff[0] == '\n')
+			if (ptr->eol || ptr->eof)
 				return (flush_to_eol(&buff, line));
 			ptr = ptr->next;
 		}
