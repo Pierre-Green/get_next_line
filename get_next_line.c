@@ -6,13 +6,13 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/06 16:35:52 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/07 15:29:34 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static t_buff		*get_initial_buff()
+static t_buff		*get_initial_buff(void)
 {
 	t_buff			*buff;
 
@@ -23,6 +23,18 @@ static t_buff		*get_initial_buff()
 	buff->len = 0;
 	buff->next = NULL;
 	return (buff);
+}
+
+static int			flush_el(t_buff *buff, char **line)
+{
+	if (!(*line = malloc(sizeof(char))))
+		return (-1);
+	(*line)[0] = 0;
+	if (buff->len == 0)
+		clear_buff_next(buff);
+	else
+		trim_buff(buff, 0);
+	return (1);
 }
 
 static char			get_eol(t_buff *buff)
@@ -44,11 +56,10 @@ static char			get_eol(t_buff *buff)
 	return (1);
 }
 
-
-static int		read_do_buff(t_buff *buff, int fd, char **line)
+static int			read_do_buff(t_buff *buff, int fd, char **line)
 {
-	int			read_ret;
-	t_buff		*node;
+	int				read_ret;
+	t_buff			*node;
 
 	node = buff;
 	while (node->len && node->next && node->next->len)
@@ -82,7 +93,9 @@ int					get_next_line(int fd, char **line)
 	if ((ptr = buff))
 		while (ptr)
 		{
-			if (ptr->eol || ptr->eof)
+			if (ptr->buff[0] == '\n' && !ptr->eol && ptr->len)
+				return (flush_el(buff, line));
+			else if (ptr->eol || ptr->eof)
 				return (flush_to_eol(&buff, line));
 			ptr = ptr->next;
 		}
@@ -90,7 +103,9 @@ int					get_next_line(int fd, char **line)
 		return (-1);
 	if (read(fd, tmp, 0) < 0)
 		return (-1);
-	if ((read_ret = read_do_buff(buff, fd, line)) >= 0)
+	if ((read_ret = read_do_buff(buff, fd, line)) > 0)
 		return (flush_to_eol(&buff, line));
-	return (-1);
+	if (read_ret == 0)
+		flush_el(buff, line);
+	return (read_ret == 0 ? 0 : -1);
 }
