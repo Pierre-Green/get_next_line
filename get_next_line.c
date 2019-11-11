@@ -86,10 +86,11 @@ static int			read_do_buff(t_buff *buff, int fd, char **line)
 int					get_next_line(int fd, char **line)
 {
 	static t_buff	*buff;
-	char			tmp[1];
 	t_buff			*ptr;
 	int				read_ret;
 
+    if (read(fd, NULL, 0) < 0)
+        return (-1);
 	if ((ptr = buff))
 		while (ptr)
 		{
@@ -100,8 +101,6 @@ int					get_next_line(int fd, char **line)
 			ptr = ptr->next;
 		}
 	else if (!(buff = get_initial_buff()))
-		return (-1);
-	if (read(fd, tmp, 0) < 0)
 		return (-1);
 	if ((read_ret = read_do_buff(buff, fd, line)) > 0)
 		return (flush_to_eol(&buff, line));

@@ -45,14 +45,18 @@ void				trim_buff(t_buff *buff, unsigned int nl)
 	char			tmp[BUFF_SIZE];
 	unsigned int	i;
 	unsigned int	j;
+	char            lock;
 
 	i = nl + 1;
 	buff->eol = 0;
 	j = 0;
+	lock = 0;
 	while (j < buff->len - i)
 	{
-		if (j > 0 && buff->buff[i + j] == '\n')
+		if (!lock && j > 0 && buff->buff[i + j] == '\n')
 			buff->eol = 1;
+		else if (j == 0 && buff->buff[i + j] == '\n')
+		    lock = 1;
 		tmp[j] = buff->buff[i + j];
 		j++;
 	}
@@ -87,16 +91,22 @@ static size_t		do_buff(t_buff **buff, char **line, unsigned int i)
 	if ((*buff)->buff[j] == '\n' && j < (*buff)->len)
 		trim_buff(*buff, j);
 	else
-		*buff = clear_buff_next(*buff);
-	return (j);
+    {
+	    if ((*buff)->eof)
+        {
+            *buff = clear_buff_next(*buff);
+            return (-1);
+        }
+        *buff = clear_buff_next(*buff);
+    }
+    return (j);
 }
 
 int					flush_to_eol(t_buff **buff, char **line)
 {
 	const size_t	len = len_to_eol(*buff);
 	unsigned int	i;
-	unsigned int	j;
-	unsigned int	k;
+	size_t          ret;
 
 	if (!(*line = malloc(sizeof(char) * (len + 1))))
 		return (-1);
@@ -105,8 +115,13 @@ int					flush_to_eol(t_buff **buff, char **line)
 	if (len == 0)
 		trim_buff(*buff, 0);
 	while (i < len)
-		i += do_buff(buff, line, i);
-	if ((*buff)->buff[0] == '\n' && (*buff)->eol && (*buff)->len)
+    {
+	    ret = do_buff(buff, line, i);
+	    if (ret == -1)
+	        return (0);
+	    i += ret;
+    }
+	if (*buff && (*buff)->len && (*buff)->buff[0] == '\n' && (*buff)->eol)
 		trim_buff(*buff, 0);
 	return ((*buff)->len == 0 && (*buff)->eof ? 0 : 1);
 }
