@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 16:09:13 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/12 14:36:19 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/12 15:43:48 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ size_t				len_to_eol(t_buff *buff)
 
 void				trim_buff(t_buff *buff, unsigned int nl)
 {
-	char			tmp[BUFF_SIZE];
+	char			tmp[BUFFER_SIZE];
 	unsigned int	i;
 	unsigned int	j;
 	char			lock;

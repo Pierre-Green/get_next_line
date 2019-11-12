@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/12 14:33:55 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/12 15:43:48 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ static int			read_do_buff(t_buff *buff, int fd, char **line)
 			return (-1);
 		node = node->next;
 	}
-	if ((read_ret = read(fd, node->buff, BUFF_SIZE)) >= 0)
+	if ((read_ret = read(fd, node->buff, BUFFER_SIZE)) >= 0)
 	{
 		if (read_ret == 0)
 			return (0);
 		node->len = read_ret;
-		if (read_ret < BUFF_SIZE)
+		if (read_ret < BUFFER_SIZE)
 			node->eof = 1;
 		if (!get_eol(node))
 			return (read_do_buff(node, fd, line));
@@ -96,7 +96,7 @@ int					get_next_line(int fd, char **line)
 	t_buff			*ptr;
 	int				read_ret;
 
-	if (read(fd, NULL, 0) < 0 || BUFF_SIZE == 0)
+	if (read(fd, NULL, 0) < 0 || BUFFER_SIZE == 0)
 		return (-1);
 	if ((ptr = buff))
 		while (ptr)
