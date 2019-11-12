@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/07 15:29:34 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/12 14:33:55 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,18 @@ static t_buff		*get_initial_buff(void)
 
 static int			flush_el(t_buff *buff, char **line)
 {
+	char			eof;
+
 	if (!(*line = malloc(sizeof(char))))
 		return (-1);
 	(*line)[0] = 0;
 	if (buff->len == 0)
+	{
+		eof = buff->eof;
 		clear_buff_next(buff);
+		if (eof)
+			return (0);
+	}
 	else
 		trim_buff(buff, 0);
 	return (1);
@@ -89,14 +96,15 @@ int					get_next_line(int fd, char **line)
 	t_buff			*ptr;
 	int				read_ret;
 
-    if (read(fd, NULL, 0) < 0)
-        return (-1);
+	if (read(fd, NULL, 0) < 0 || BUFF_SIZE == 0)
+		return (-1);
 	if ((ptr = buff))
 		while (ptr)
 		{
-			if (ptr->buff[0] == '\n' && !ptr->eol && ptr->len)
+			if ((ptr->buff[0] == '\n' && !ptr->eol && ptr->len)
+				|| (ptr->eof && !ptr->len))
 				return (flush_el(buff, line));
-			else if (ptr->eol || ptr->eof)
+			else if (ptr->eol || (ptr->eof && ptr->len))
 				return (flush_to_eol(&buff, line));
 			ptr = ptr->next;
 		}
