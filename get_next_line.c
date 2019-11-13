@@ -96,7 +96,7 @@ int					get_next_line(int fd, char **line)
 	t_buff			*ptr;
 	int				read_ret;
 
-	if (read(fd, NULL, 0) < 0 || BUFFER_SIZE == 0)
+	if (read(fd, NULL, 0) < 0 || BUFFER_SIZE == 0 || !line)
 		return (-1);
 	if ((ptr = buff))
 		while (ptr)
