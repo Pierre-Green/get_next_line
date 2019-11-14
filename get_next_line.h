@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:54 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/12 15:44:53 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/14 14:01:44 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
-# 	define BUFFER_SIZE 64
+#  define BUFFER_SIZE 64
 # endif
 
 typedef struct		s_buff
