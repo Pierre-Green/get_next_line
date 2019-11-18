@@ -3,5 +3,6 @@
 .idea
 cmake*
 CMake*
-main.c
 tests
+.DS_Store
+main.c

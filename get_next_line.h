@@ -6,13 +6,14 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:54 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/14 14:01:44 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:44:04 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # include <stdlib.h>
+# include <limits.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 64
@@ -34,5 +35,7 @@ int					flush_to_eol(t_buff **buff, char **line);
 t_buff				*clear_buff_next(t_buff *buff);
 
 void				trim_buff(t_buff *buff, unsigned int nl);
+
+int					flush_el(t_buff **buff, char **line);
 
 #endif
