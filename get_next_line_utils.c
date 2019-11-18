@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 16:09:13 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/18 16:57:03 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/18 17:09:08 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ t_buff				*clear_buff_next(t_buff *buff)
 	return (ptr);
 }
 
-static size_t		do_buff(t_buff **buff, char **line, unsigned int i, char *lock_el)
+static size_t		do_buff(t_buff **buff, char **line, unsigned int i,
+	char *lock_el)
 {
 	size_t			j;
 

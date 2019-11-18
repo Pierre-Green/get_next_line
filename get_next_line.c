@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/18 16:43:57 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/18 17:12:22 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,17 @@ static int			read_do_buff(t_buff *buff, int fd, char **line, int score)
 		if (read_ret == 0 && (node->eof = 1))
 			return (score);
 		score += (node->len = read_ret);
-		eol = get_eol(node);
-		if (read_ret < BUFFER_SIZE)
+		if ((eol = get_eol(node)) >= 0 && read_ret < BUFFER_SIZE)
 			node->eof = 1;
 		else if (!eol)
-		{
-			score = read_do_buff(node, fd, line, score);
-			return (score);
-		}
+			return ((score = read_do_buff(node, fd, line, score)));
 	}
 	return (score);
 }
 
 int					get_next_line(int fd, char **line)
 {
-	static t_buff	*buff[(unsigned long) INT_MAX + 1];
+	static t_buff	*buff[(unsigned long)INT_MAX + 1];
 	t_buff			*ptr;
 	int				read_ret;
 
