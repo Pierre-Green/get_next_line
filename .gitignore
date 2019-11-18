@@ -3,5 +3,4 @@
 .idea
 cmake*
 CMake*
-tests
 .DS_Store
