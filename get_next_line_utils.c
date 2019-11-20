@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 16:09:13 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/19 17:20:14 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/20 19:59:01 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,10 @@ void				trim_buff(t_buff *buff, unsigned int nl)
 			buff->eol = 1;
 		else if (j == 0 && buff->buff[i + j] == '\n')
 			lock = 1;
-		tmp[j] = buff->buff[i + j];
+		buff->buff[j] = buff->buff[i + j];
 		j++;
 	}
-	i = 0;
 	buff->len = j;
-	while (i < buff->len)
-	{
-		buff->buff[i] = tmp[i];
-		i++;
-	}
 }
 
 t_buff				*clear_buff_next(t_buff *buff)
