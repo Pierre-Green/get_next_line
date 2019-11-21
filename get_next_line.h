@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:54 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/18 16:44:04 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/21 16:39:49 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <unistd.h>
+# include <fcntl.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 64
 # endif
