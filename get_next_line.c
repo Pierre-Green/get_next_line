@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 19:49:24 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/19 17:41:41 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/21 16:36:48 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ int					get_next_line(int fd, char **line)
 		}
 	else if (!(buff[fd] = get_initial_buff()))
 		return (-1);
-	if ((read_ret = read_do_buff(buff[fd], fd, line, 0)) > 0 || buff[fd]->len != 0)
+	if ((read_ret = read_do_buff(buff[fd], fd, line, 0)) > 0
+		|| buff[fd]->len != 0)
 		return (flush_to_eol(&(buff[fd]), line));
 	if (read_ret == 0)
 		flush_el(&(buff[fd]), line);

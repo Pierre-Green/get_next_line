@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 14:56:37 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/18 17:14:44 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/21 16:34:37 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ int				main(int ac, char **av)
 		if (ret == 0)
 			break ;
 	}
+	while (1);
 	return (ret);
 }

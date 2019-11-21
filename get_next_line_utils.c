@@ -6,7 +6,7 @@
 /*   By: pguthaus <pguthaus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 16:09:13 by pguthaus          #+#    #+#             */
-/*   Updated: 2019/11/20 20:01:31 by pguthaus         ###   ########.fr       */
+/*   Updated: 2019/11/21 16:33:07 by pguthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int					flush_to_eol(t_buff **buff, char **line)
 		trim_buff(*buff, 0);
 	if ((*buff)->eof && !lock_el && ((*buff)->len == 0 || (*buff)->len == len))
 	{
+		clear_buff_next(*buff);
 		*buff = NULL;
 		return (0);
 	}
